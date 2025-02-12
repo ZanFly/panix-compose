@@ -1,0 +1,78 @@
+networks:
+
+  net:
+    # Use a custom driver
+    driver: bridge
+  MacVlan01:
+    external: true
+
+services:
+
+# Container panix-db
+  panix-db:
+    container_name: panix-db
+    environment:
+     - "MYSQL_ROOT_PASSWORD=!!!ChangeMe!!!"
+#    ports:
+#      - "3306:3306"
+#      - "33060:33060"
+    hostname: "panix-db"
+    image: "mysql:latest"
+    networks:
+      - net
+    restart: "unless-stopped"
+    volumes:
+      - "[YOUR DATA FOLDER]/panix-mysql:/var/lib/mysql"
+
+# Contaier GUACD
+  panix-guacd:
+    container_name: "panix-guacd"
+    environment:
+      - "GUACD_LOG_LEVEL=info"
+#    ports:
+#      - "4822:4822"
+    hostname: "panix-guacd"
+    image: "guacamole/guacd:latest"
+    networks:
+      - net
+    restart: "unless-stopped"
+    volumes:
+      - "[YOUR DATA FOLDER]/panix-guacd:/etc/guacamole"
+
+# Container Guacamole
+  panix-guacamole:
+    container_name: "panix-guacamole"
+    environment:
+      - "MYSQL_HOSTNAME=panix-db"
+      - "MYSQL_DATABASE=guacamoledb"
+      - "MYSQL_USER=guacamoleuser"
+      - "MYSQL_PASSWORD=FlyartyFamilyGUAC"
+      - "GUACD_HOSTNAME=panix-guacd"
+      - "EXTENSIONS=auth-totp"
+      - "TOTP_ENABLED=true"
+      - "GUACAMOLE_HOME=/config"
+    ports:
+      - "8080:8080"
+    image: "guacamole/guacamole:latest"   
+    depends_on: 
+      - panix-db
+    networks:
+       MacVlan01:
+         ipv4_address: 192.168.0.4
+       net:
+    volumes:
+      - "/etc/localtime:/etc/localtime"
+      - "[YOUR DATA FOLDER]/panix-guacamole:/config"
+      
+# QUESTO E' ADMINER, NON e'NECESARIO MA PUO' ESSERE DI AIUTO PER DEPLOYARE UN NUOVO DB IN CASO DI NECESSITA'
+#  panix-adminsql:
+#    container_name: "panix-adminsql"
+#    ports:
+#      - "8081:8080"
+#    image: "adminer:latest"
+#    depends_on: 
+#      - panix-db
+#    networks:
+#       MacVlan01:
+#         ipv4_address: 192.168.0.150
+#       net:
