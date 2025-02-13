@@ -14,6 +14,9 @@ Also, create a bridge "net" for communications between containers.
 There's also an AddOn with adminer:latest can be useful for first db deploy or if you want to see/modify db data.
 
 To do before use:
+
 1- Check network configuration
+
 2- CHANGE PASSWORDS (mysql root, guacamole db user)
+
 3- Change data folder for binding your favourite "AppData" folder, or have volumes for saving data
