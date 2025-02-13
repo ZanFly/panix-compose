@@ -46,7 +46,7 @@ services:
       - "MYSQL_HOSTNAME=panix-db"
       - "MYSQL_DATABASE=guacamoledb"
       - "MYSQL_USER=guacamoleuser"
-      - "MYSQL_PASSWORD=FlyartyFamilyGUAC"
+      - "MYSQL_PASSWORD=!!!ChangeMe!!!"
       - "GUACD_HOSTNAME=panix-guacd"
       - "EXTENSIONS=auth-totp"
       - "TOTP_ENABLED=true"
