@@ -51,8 +51,8 @@ services:
       - "EXTENSIONS=auth-totp"
       - "TOTP_ENABLED=true"
       - "GUACAMOLE_HOME=/config"
-    ports:
-      - "8080:8080"
+#    ports:
+#      - "8080:8080"
     image: "guacamole/guacamole:latest"   
     depends_on: 
       - panix-db
